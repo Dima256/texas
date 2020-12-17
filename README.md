@@ -3,4 +3,5 @@
 # Game - texas holdem
 
 To run you can use Idea Intellij.
-Run Main.class
+
+Run Main.scala
