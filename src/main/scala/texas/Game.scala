@@ -9,7 +9,7 @@ object Game {
   def apply(raw: String): Either[String, String] = {
     val arrayRaw = raw.split(" ").filter(_.nonEmpty)
 
-    if (arrayRaw.length < 3) Left("too many parts for a game")
+    if (arrayRaw.length < 3) Left("too less parts for a game")
     else if (arrayRaw(0) == "texas-holdem") {
       val eitherBoard = arrayRaw(1).grouped(2).toList.map(Card(_)).sequence
       val eitherHands = arrayRaw.drop(2).map {
@@ -45,7 +45,7 @@ object Game {
 
       if (totalHands != totalHands.distinct) Left("game must have distinct cards")
       else {
-        val sortedCombos = hands.map(hand => hand -> bestCombo(board, hand)).sortBy(_._2).reverse
+        val sortedCombos = hands.map(hand => hand -> bestCombo(board, hand)).sortBy(_._2)
         Right(printResult(sortedCombos.toList).reverse.mkString(" "))
       }
     }
@@ -55,7 +55,7 @@ object Game {
     list match {
       case head :: rest =>
         val equalHands = head._1 :: rest.takeWhile(r => r._2.compare(head._2) == 0).map(_._1)
-        printResult(list.drop(equalHands.size), equalHands.mkString("=") :: result)
+        printResult(list.drop(equalHands.size), equalHands.reverse.mkString("=") :: result)
       case Nil => result
     }
   }
